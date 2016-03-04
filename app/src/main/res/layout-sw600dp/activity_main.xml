@@ -1,0 +1,124 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#B9B6B6"
+    android:baselineAligned="false"
+    android:id="@+id/linearLayout"
+    android:weightSum="1">
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_weight="0.03"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txtTimer"
+            android:textColor="#ffffff"
+            android:layout_weight="1.0"
+            android:textSize="110sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/txtScoreUpdate"
+            android:textSize="100sp"
+            android:textColor="#ffffff"
+            android:layout_marginRight="15dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="215dp"
+        android:transitionGroup="false"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="0"
+            android:textSize="160sp"
+            android:id="@+id/txtFirstNum"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textColor="#ffffff"
+            android:textSize="160sp"
+            android:text="+"
+            android:id="@+id/textView2"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:textColor="#ffffff"
+            android:textSize="160sp"
+            android:text="0"
+            android:id="@+id/txtSecondNum"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="215dp"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="-20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="="
+            android:textColor="#ffffff"
+            android:textSize="160sp"
+            android:id="@+id/textView4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="00"
+            android:textColor="#ffffff"
+            android:textSize="160sp"
+            android:id="@+id/txtResult"
+            android:layout_marginLeft="5dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:weightSum="1">
+
+        <ImageButton
+            android:layout_width="360dp"
+            android:layout_height="330dp"
+            android:id="@+id/bWrong"
+            android:background="@mipmap/x"
+            android:layout_weight="0.5"
+            android:layout_marginRight="50dp" />
+
+        <ImageButton
+            android:layout_width="360dp"
+            android:layout_height="330dp"
+            android:id="@+id/bRight"
+            android:background="@mipmap/check"
+            android:layout_weight="0.5" />
+
+    </LinearLayout>
+</LinearLayout>

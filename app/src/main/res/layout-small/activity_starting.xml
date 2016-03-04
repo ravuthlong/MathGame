@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#e1dfdf"
+    android:baselineAligned="false"
+    android:id="@+id/linearLayout"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:weightSum="1"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:background="@mipmap/num"
+            android:layout_marginLeft="10dp" />
+
+        <ImageView
+            android:layout_width="231dp"
+            android:layout_height="91dp"
+            android:id="@+id/imageView2"
+            android:background="@mipmap/ladder"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="-30dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="310dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10dp"
+        android:layout_weight="0.20">
+
+        <ImageButton
+            android:layout_width="170dp"
+            android:layout_height="100dp"
+            android:id="@+id/bStart"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/play" />
+
+        <ImageButton
+            android:layout_width="110dp"
+            android:layout_height="55dp"
+            android:id="@+id/bRank"
+            android:background="@mipmap/rank"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp" />
+        <ImageButton
+            android:layout_width="110dp"
+            android:layout_height="55dp"
+            android:id="@+id/bSetting"
+            android:layout_gravity="center_horizontal"
+            android:background="@mipmap/setting" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="55dp">
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:id="@+id/imageView3"
+            android:background="@mipmap/cc"
+            android:layout_marginTop="10dp" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageView4"
+            android:background="@mipmap/logo" />
+    </LinearLayout>
+
+</LinearLayout>

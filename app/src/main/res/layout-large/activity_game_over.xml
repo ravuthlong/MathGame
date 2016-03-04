@@ -1,0 +1,105 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#ffffff"
+    android:baselineAligned="false"
+    android:id="@+id/linearLayout"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/gOver"
+            android:id="@+id/txtGameOver"
+            android:layout_gravity="center_horizontal"
+            android:textSize="30dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="6dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="New Score:"
+            android:id="@+id/txtNewScore"
+            android:layout_gravity="center_horizontal"
+            android:textSize="35sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="0"
+            android:id="@+id/txtScore"
+            android:layout_marginLeft="5dp"
+            android:textSize="35sp"
+            android:layout_marginTop="-10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="-10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="High Score:"
+            android:id="@+id/txtHS"
+            android:textSize="35sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="0"
+            android:id="@+id/txtHighScore"
+            android:layout_marginLeft="5dp"
+            android:textSize="35sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="REPLAY"
+            android:id="@+id/bReplay"
+            android:layout_weight="0.32"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="MAIN MENU"
+            android:id="@+id/bMenu"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.36"
+            android:textSize="20sp" />
+    </LinearLayout>
+</LinearLayout>
