@@ -5,24 +5,30 @@ import android.media.MediaPlayer;
 
 // Class to start sound
 
-public class SoundPlayer {
+class SoundPlayer {
 
-    MediaPlayer mp;
-    Context context;
-    int soundID;
+    private MediaPlayer mp;
+    private Context context;
+    private int soundID;
 
-    public SoundPlayer(Context context, int soundID) {
+    SoundPlayer(Context context, int soundID) {
         this.context = context;
         this.soundID = soundID;
     }
 
-    public void playSound() {
+    /**
+     * Play the sound and set listener
+     */
+    void playSound() {
         mp = MediaPlayer.create(context, soundID);
         mp.start();
         onCompleteListener();
     }
 
-    public void onCompleteListener() {
+    /**
+     * Reset and release resource upon completion
+     */
+    private void onCompleteListener() {
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {

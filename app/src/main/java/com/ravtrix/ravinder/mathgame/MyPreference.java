@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 /**
  * Created by Ravinder on 12/23/15.
  */
-public class MyPreference {
+class MyPreference {
     private static MyPreference yourPreference;
     private SharedPreferences sharedPreferences;
 
-    public static MyPreference getInstance(Context context) {
+    static MyPreference getInstance(Context context) {
         if (yourPreference == null) {
             yourPreference = new MyPreference(context);
         }
@@ -21,13 +21,13 @@ public class MyPreference {
         sharedPreferences = context.getSharedPreferences("YourCustomNamedPreference", Context.MODE_PRIVATE);
     }
 
-    public void saveData(String key, int value) {
+    void saveData(String key, int value) {
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
         prefsEditor.putInt(key, value);
         prefsEditor.commit();
     }
 
-    public int getData(String key) {
+    int getData(String key) {
         if (sharedPreferences!= null) {
             return sharedPreferences.getInt(key, 0);
         }

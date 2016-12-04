@@ -7,26 +7,23 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
-// Starting activity screen with play and high score buttons
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+// Starting activity screen with play and high score buttons
 public class StartingActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageButton bStart, bRank;
-    private ImageButton bSetting;
+    @BindView(R.id.bStart) protected ImageButton bStart;
+    @BindView(R.id.bRank) protected ImageButton bRank;
+    @BindView(R.id.bSetting) protected ImageButton bSetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_starting);
-
-        bStart = (ImageButton) findViewById(R.id.bStart);
-        bSetting = (ImageButton) findViewById(R.id.bSetting);
-        bRank = (ImageButton) findViewById(R.id.bRank);
-        bStart.setOnClickListener(this);
-        bRank.setOnClickListener(this);
-        bSetting.setOnClickListener(this);
+        setFullScreen();
+        ButterKnife.bind(this);
+        setListeners();
     }
 
     @Override
@@ -51,5 +48,15 @@ public class StartingActivity extends AppCompatActivity implements View.OnClickL
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    private void setListeners() {
+        bStart.setOnClickListener(this);
+        bRank.setOnClickListener(this);
+        bSetting.setOnClickListener(this);
+    }
+
+    private void setFullScreen() {
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 }

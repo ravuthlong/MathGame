@@ -8,44 +8,30 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Locale;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ScoreStat extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView viewNormalScore, viewExpertScore, txtHighS, txtN, txtE;
-    private ImageButton buttonX;
+    @BindView(R.id.viewNormalScore) protected TextView viewNormalScore;
+    @BindView(R.id.viewExpertScore) protected TextView viewExpertScore;
+    @BindView(R.id.txtHighS) protected TextView txtHighS;
+    @BindView(R.id.txtN) protected TextView txtN;
+    @BindView(R.id.txtE) protected TextView txtE;
+    @BindView(R.id.buttonX) protected ImageButton buttonX;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_stat);
+        ButterKnife.bind(this);
 
-        viewNormalScore = (TextView) findViewById(R.id.viewNormalScore);
-        viewExpertScore = (TextView) findViewById(R.id.viewExpertScore);
-
-        buttonX = (ImageButton) findViewById(R.id.buttonX);
-        txtHighS = (TextView) findViewById(R.id.txtHighS);
-        txtN = (TextView) findViewById(R.id.txtN);
-        txtE = (TextView) findViewById(R.id.txtE);
-
-        Typeface jenFont = Typeface.createFromAsset(getAssets(), "setFont.otf");
-        viewNormalScore.setTypeface(jenFont, Typeface.BOLD);
-        viewExpertScore.setTypeface(jenFont, Typeface.BOLD);
-        txtHighS.setTypeface(jenFont, Typeface.BOLD);
-        txtE.setTypeface(jenFont, Typeface.BOLD);
-        txtN.setTypeface(jenFont, Typeface.BOLD);
-
-        buttonX.setOnClickListener(this);
+        setTypeFace();
+        setListeners();
         changeScreenSize();
         displayHighScore();
-    }
-
-    // Change the screen display size of this activity to smaller
-    public void changeScreenSize() {
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
-
-        getWindow().setLayout((int) (width * 0.5), (int) (height * 0.3));
     }
 
     @Override
@@ -57,11 +43,14 @@ public class ScoreStat extends AppCompatActivity implements View.OnClickListener
         }
     }
 
-    // Display high score of game
+    /**
+     * Get high score from shared preference
+     */
     public void displayHighScore() {
         MyPreference yourPreference = MyPreference.getInstance(ScoreStat.this);
-        int hiScoreN = 0;
-        int hiScoreE = 0;
+        int hiScoreN;
+        int hiScoreE;
+
         try {
             hiScoreN = yourPreference.getData("normalScore");
         } catch (ClassCastException e) {
@@ -72,8 +61,37 @@ public class ScoreStat extends AppCompatActivity implements View.OnClickListener
         } catch (ClassCastException e) {
             hiScoreE = 0;
         }
-        viewNormalScore.setText(Integer.toString(hiScoreN));
-        viewExpertScore.setText(Integer.toString(hiScoreE));
+        viewNormalScore.setText(String.format(Locale.getDefault(), "%d", hiScoreN));
+        viewExpertScore.setText(String.format(Locale.getDefault(), "%d", hiScoreE));
+    }
+
+
+    /**
+     * Reduces the size. Change screen size to pop up.
+     */
+    public void changeScreenSize() {
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+
+        getWindow().setLayout((int) (width * 0.5), (int) (height * 0.3));
+    }
+
+    /**
+     * Change font to style setFont.otf
+     */
+    private void setTypeFace() {
+        Typeface jenFont = Typeface.createFromAsset(getAssets(), "setFont.otf");
+        viewNormalScore.setTypeface(jenFont, Typeface.BOLD);
+        viewExpertScore.setTypeface(jenFont, Typeface.BOLD);
+        txtHighS.setTypeface(jenFont, Typeface.BOLD);
+        txtE.setTypeface(jenFont, Typeface.BOLD);
+        txtN.setTypeface(jenFont, Typeface.BOLD);
+    }
+
+    private void setListeners() {
+        buttonX.setOnClickListener(this);
     }
 }
 

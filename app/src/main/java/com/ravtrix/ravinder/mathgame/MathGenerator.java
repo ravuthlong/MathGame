@@ -5,17 +5,18 @@ import java.util.Random;
 /**
  * Created by Ravinder on 12/22/15.
  */
-public class MathGenerator {
+class MathGenerator {
 
-    Random rand = new Random();
     private boolean isRight = false;
     private boolean isWrong = false;
     private static int startingNumber = 0;
     private int secondNumber;
     private int resultNum;
 
-    public void generateNumbers() {
+    void generateNumbers() {
         int numToAdd;
+        Random rand = new Random();
+
         secondNumber = rand.nextInt(4) + 2;
         numToAdd = weightedRandom();
         resultNum = startingNumber + secondNumber + numToAdd;
@@ -27,11 +28,16 @@ public class MathGenerator {
             isWrong = true;
         }
     }
-    public void updateStartingNum() {
+    void updateStartingNum() {
         startingNumber += secondNumber;
     }
 
+    /**
+     * Find the number based on the random number.
+     * @return      the number
+     */
     private int weightedRandom() {
+        Random rand = new Random();
         int num = rand.nextInt() * 100;
 
         if(num < 55) {
@@ -45,23 +51,22 @@ public class MathGenerator {
         }
     }
 
-    public void setStartingNumber(int starting) {
+    void setStartingNumber(int starting) {
         startingNumber = starting;
     }
-
-    public boolean getIsRight() {
+    boolean getIsRight() {
         return isRight;
     }
-    public boolean getIsWrong() {
+    boolean getIsWrong() {
         return isWrong;
     }
-    public int getStartingNumber() {
+    int getStartingNumber() {
         return startingNumber;
     }
-    public int getSecondNumber() {
+    int getSecondNumber() {
         return secondNumber;
     }
-    public int getResultNum() {
+    int getResultNum() {
         return resultNum;
     }
 }

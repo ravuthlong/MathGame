@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -11,53 +12,42 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
 import java.util.Random;
 
-public class GameModeActivity extends CustomActivity implements View.OnClickListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class GameModeActivity extends AppCompatActivity implements View.OnClickListener {
+
+    @BindView(R.id.linearLayout)    protected LinearLayout linearLayout;
+    @BindView(R.id.txtFirstNum)     protected TextView txtFirstNum;
+    @BindView(R.id.txtSecondNum)    protected TextView txtSecondNum;
+    @BindView(R.id.txtResult)       protected TextView txtResult;
+    @BindView(R.id.txtTimer)        protected TextView txtTimer;
+    @BindView(R.id.txtScoreUpdate)  protected TextView txtScoreUpdate;
+    @BindView(R.id.bRight)          protected ImageButton bRight;
+    @BindView(R.id.bWrong)          protected ImageButton bWrong;
     private Toast toast = null;
     private boolean isTimerRunning = false;
     private SoundPlayer soundClick, soundEnd;
     private CountDownTimer countDownTimer;
-    private LinearLayout linearLayout;
-    private TextView txtFirstNum, txtSecondNum, txtResult, txtTimer, txtScoreUpdate;
-    private ImageButton bRight, bWrong;
-    private Random rand;
     static int randomAndroidColor;
     private MathGenerator mathGenerator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        Typeface tf = Typeface.createFromAsset(getAssets(), "bebas.ttf");
-        linearLayout = (LinearLayout) findViewById(R.id.linearLayout);
-        txtFirstNum = (TextView) findViewById(R.id.txtFirstNum);
-        txtSecondNum = (TextView) findViewById(R.id.txtSecondNum);
-        txtResult = (TextView) findViewById(R.id.txtResult);
-        bRight = (ImageButton) findViewById(R.id.bRight);
-        bWrong = (ImageButton) findViewById(R.id.bWrong);
-        txtTimer = (TextView) findViewById(R.id.txtTimer);
-        txtScoreUpdate = (TextView) findViewById(R.id.txtScoreUpdate);
-
-        bRight.setOnClickListener(GameModeActivity.this);
-        bWrong.setOnClickListener(GameModeActivity.this);
-
+        setFullScreen();
+        setButtonListeners();
+        setSounds();
         backgroundGenerator();
-        soundClick = new SoundPlayer(this, R.raw.click);
-        soundEnd = new SoundPlayer(this, R.raw.end);
-
-        txtFirstNum.setTypeface(tf);
-        txtFirstNum.setText(Integer.toString(mathGenerator.getStartingNumber()));
-        txtSecondNum.setTypeface(tf);
-        txtSecondNum.setText(Integer.toString(mathGenerator.getSecondNumber()));
-        txtResult.setTypeface(tf);
-        txtResult.setText(Integer.toString(mathGenerator.getResultNum()));
-        txtTimer.setTypeface(tf);
-        txtScoreUpdate.setTypeface(tf);
+        setTypeFace();
     }
+
     @Override
     protected void onStop () {
         super.onStop();
@@ -71,80 +61,31 @@ public class GameModeActivity extends CustomActivity implements View.OnClickList
 
         switch (v.getId()) {
             case R.id.bRight:
-               
+                stopTimer();
+
                 if (mathGenerator.getIsRight()) {
-                    //soundClick.playSound();
-                    toPlaySound(soundClick);
-                    if (isTimerRunning) {
-                        countDownTimer.cancel();
-                    }
-                    startTimer();
-                    isTimerRunning = true;
-                    mathGenerator.updateStartingNum();
-
-                    String currentScore = String.valueOf(mathGenerator.getStartingNumber());
-                    txtScoreUpdate.setText(currentScore);
-
-                    backgroundGenerator();
-
-                    txtFirstNum.setText(Integer.toString(mathGenerator.getStartingNumber()));
-                    txtSecondNum.setText(Integer.toString(mathGenerator.getSecondNumber()));
-                    txtResult.setText(Integer.toString(mathGenerator.getResultNum()));
+                    startNewProblem();
                 } else {
-                    //soundEnd.playSound();
-                    toPlaySound(soundEnd);
-
-                    disableButtons();
-
-                    if (isTimerRunning) {
-                        countDownTimer.cancel();
-                    }
-                    Intent intent = new Intent(getApplicationContext(), GameOverActivity.class);
-                    intent.putExtra("total", mathGenerator.getStartingNumber());
-                    startActivity(intent);
-                    mathGenerator.setStartingNumber(0);
+                    endGame();
                 }
                 break;
             case R.id.bWrong:
+                stopTimer();
 
                 if (mathGenerator.getIsWrong()) {
-                    //soundClick.playSound();
-                    toPlaySound(soundClick);
-
-                    if (isTimerRunning) {
-                        countDownTimer.cancel();
-                    }
-                    mathGenerator.updateStartingNum();
-                    startTimer();
-                    isTimerRunning = true;
-                    backgroundGenerator();
-
-                    String currentScore = String.valueOf(mathGenerator.getStartingNumber());
-                    txtScoreUpdate.setText(currentScore);
-
-                    txtFirstNum.setText(Integer.toString(mathGenerator.getStartingNumber()));
-                    txtSecondNum.setText(Integer.toString(mathGenerator.getSecondNumber()));
-                    txtResult.setText(Integer.toString(mathGenerator.getResultNum()));
+                    startNewProblem();
                 } else {
-                    toPlaySound(soundEnd);
-
-                    //soundEnd.playSound();
-                    disableButtons();
-
-                    if (isTimerRunning) {
-                        countDownTimer.cancel();
-                    }
-                    Intent intent = new Intent(getApplicationContext(), GameOverActivity.class);
-                    intent.putExtra("total", mathGenerator.getStartingNumber());
-                    startActivity(intent);
-                    mathGenerator.setStartingNumber(0);
+                    endGame();
                 }
                 break;
         }
     }
 
+    /**
+     * Count down class. OnFinish() will be invoked upon out of time
+     */
     public class MyCountDownTimer extends CountDownTimer {
-        public MyCountDownTimer(long startTime, long interval){
+        MyCountDownTimer(long startTime, long interval){
             super (startTime, interval);
             synchronized(this){
             }
@@ -154,20 +95,10 @@ public class GameModeActivity extends CustomActivity implements View.OnClickList
         @Override
         public void onFinish() {
             txtTimer.setText("0");
-            //soundEnd.playSound();
-            toPlaySound(soundEnd);
-
-            disableButtons();
-            Intent intent = new Intent(getApplicationContext(), GameOverActivity.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-
-            intent.putExtra("total", mathGenerator.getStartingNumber());
-            startActivity(intent);
-            mathGenerator.setStartingNumber(0);
-            toast = Toast.makeText(GameModeActivity.this, "TIMES UP", Toast.LENGTH_LONG);
+            endGame();
+            toast = Toast.makeText(GameModeActivity.this, "TIME'S UP", Toast.LENGTH_LONG);
             toast.show();
         }
-
         @Override
         public void onTick(long millisUntilFinished) {
         }
@@ -178,13 +109,17 @@ public class GameModeActivity extends CustomActivity implements View.OnClickList
         return;
     }
 
-    // Disable the buttons based to some conditions. See when this is used.
+    /**
+     * Disable buttons when game ended
+     */
     public void disableButtons() {
         bRight.setEnabled(false);
         bWrong.setEnabled(false);
     }
 
-    // Start the timer in 250 as increment. This controls countdown display.
+    /**
+     * Start the timer in 250 as increment. This controls countdown display.
+     */
     private void startTimer() {
 
         long startTime = 0;
@@ -203,17 +138,14 @@ public class GameModeActivity extends CustomActivity implements View.OnClickList
                 interval = 250;
                 break;
         }
-        countDownTimer = new MyCountDownTimer (startTime, interval) {
-            public void onTick(long millisUntilFinished) {
-                long timeLeft = (millisUntilFinished / 250);
-                String timeString = String.valueOf(timeLeft);
-                txtTimer.setText(timeString);
-            }
-        }.start();
+        startCountDownListener(startTime, interval);
     }
 
+    /**
+     * Generate a random background color
+     */
     private void backgroundGenerator() {
-        rand = new Random();
+        Random rand = new Random();
         mathGenerator = new MathGenerator();
         mathGenerator.generateNumbers();
         if (mathGenerator.getStartingNumber() == 0) {
@@ -226,10 +158,109 @@ public class GameModeActivity extends CustomActivity implements View.OnClickList
         }
     }
 
+    /**
+     * Play the sound
+     * @param soundPlayer       the sound player to play
+     */
     public void toPlaySound(SoundPlayer soundPlayer) {
         if (GameSetting.isSoundToggleChecked) {
             soundPlayer.playSound();
         }
+    }
+
+    private void setButtonListeners() {
+        this.bRight.setOnClickListener(this);
+        this.bWrong.setOnClickListener(this);
+    }
+
+    /**
+     * Set numbers from random number generator
+     */
+    private void setNumbers() {
+        txtFirstNum.setText(String.format(Locale.getDefault(), "%d", mathGenerator.getStartingNumber()));
+        txtSecondNum.setText(String.format(Locale.getDefault(), "%d", mathGenerator.getSecondNumber()));
+        txtResult.setText(String.format(Locale.getDefault(), "%d", mathGenerator.getResultNum()));
+    }
+
+    /**
+     * Change font to style setFont.otf
+     */
+    private void setTypeFace() {
+        Typeface tf = Typeface.createFromAsset(getAssets(), "bebas.ttf");
+
+        this.txtFirstNum.setTypeface(tf);
+        this.txtFirstNum.setText(String.format(Locale.getDefault(), "%d", mathGenerator.getStartingNumber()));
+        txtSecondNum.setTypeface(tf);
+        txtSecondNum.setText(String.format(Locale.getDefault(), "%d", mathGenerator.getSecondNumber()));
+        txtResult.setTypeface(tf);
+        txtResult.setText(String.format(Locale.getDefault(), "%d", mathGenerator.getResultNum()));
+        txtTimer.setTypeface(tf);
+        txtScoreUpdate.setTypeface(tf);
+    }
+
+    /**
+     * Set the two different clicking sounds
+     */
+    private void setSounds() {
+        soundClick = new SoundPlayer(this, R.raw.click);
+        soundEnd = new SoundPlayer(this, R.raw.end);
+    }
+
+    /**
+     * Set the screen size to full screen mode
+     */
+    private void setFullScreen() {
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+
+    /**
+     * Stop the countdown timer
+     */
+    private void stopTimer() {
+        if (isTimerRunning) {
+            countDownTimer.cancel();
+        }
+    }
+
+    /**
+     * The user answered correctly, set a new problem
+     */
+    private void startNewProblem() {
+        toPlaySound(soundClick);
+        startTimer();
+        isTimerRunning = true;
+        mathGenerator.updateStartingNum();
+        String currentScore = String.valueOf(mathGenerator.getStartingNumber());
+        txtScoreUpdate.setText(currentScore);
+        backgroundGenerator();
+        setNumbers();
+    }
+
+    /**
+     * The user answered incorrectly, game over
+     */
+    private void endGame() {
+        toPlaySound(soundEnd);
+        disableButtons();
+        Intent intent = new Intent(getApplicationContext(), GameOverActivity.class);
+        intent.putExtra("total", mathGenerator.getStartingNumber());
+        startActivity(intent);
+        mathGenerator.setStartingNumber(0);
+    }
+
+    /**
+     * Start the countdown
+     * @param startTime         the start time
+     * @param interval          the interval of count
+     */
+    private void startCountDownListener(long startTime, long interval) {
+        countDownTimer = new MyCountDownTimer (startTime, interval) {
+            public void onTick(long millisUntilFinished) {
+                long timeLeft = (millisUntilFinished / 250);
+                String timeString = String.valueOf(timeLeft);
+                txtTimer.setText(timeString);
+            }
+        }.start();
     }
 }
 

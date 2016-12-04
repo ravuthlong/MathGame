@@ -1,24 +1,27 @@
 package com.ravtrix.ravinder.mathgame;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-public class GameSetting extends AppCompatActivity implements View.OnClickListener {
-    RadioGroup radiogroup;
-    ToggleButton toggleButton;
-    Button bsaveSetting;
-    Typeface setFont;
-    TextView txtSound, txtLevel;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class GameSetting extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,
+        ToggleButton.OnCheckedChangeListener {
+
+    @BindView(R.id.radioGroup) protected RadioGroup radiogroup;
+    @BindView(R.id.toggleButton) protected ToggleButton toggleButton;
+    private Typeface setFont;
+    @BindView(R.id.txtSound) protected TextView txtSound;
+    @BindView(R.id.txtLevel) protected TextView txtLevel;
     static int gameLevel = 0; // Default at normal mode
     static boolean isSoundToggleChecked = true;
 
@@ -27,64 +30,30 @@ public class GameSetting extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_setting);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        ButterKnife.bind(this);
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Game Setting");
-
-        setFont = Typeface.createFromAsset(getAssets(), "setFont.otf");
-
-        radiogroup = (RadioGroup) findViewById(R.id.radioGroup);
-        toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
-        bsaveSetting = (Button) findViewById(R.id.bsaveSetting);
-
-        txtSound = (TextView) findViewById(R.id.txtSound);
-        txtLevel = (TextView) findViewById(R.id.txtLevel);
-
-
-        txtSound.setTypeface(setFont, Typeface.BOLD);
-        txtLevel.setTypeface(setFont, Typeface.BOLD);
-        bsaveSetting.setTypeface(setFont, Typeface.BOLD);
-        toggleButton.setTypeface(setFont, Typeface.BOLD);
-
-
-        bsaveSetting.setOnClickListener(this);
-
-        if (isSoundToggleChecked) {
-            toggleButton.setChecked(true);
-
-        } else {
-            toggleButton.setChecked(false);
-        }
-
+        setTypeface();
+        setToggle();
+        setListeners();
         populateRadioGroup();
-
-        switch(gameLevel) {
-            case 0:
-                ((RadioButton)radiogroup.getChildAt(0)).setChecked(true);
-                break;
-            case 1:
-                ((RadioButton)radiogroup.getChildAt(1)).setChecked(true);
-                break;
-        }
+        setSelectedLevel();
     }
 
     @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
-            case R.id.bsaveSetting:
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        gameLevel = radiogroup.getCheckedRadioButtonId();
 
-                gameLevel = radiogroup.getCheckedRadioButtonId();
+    }
 
-                if (!toggleButton.isChecked()) {
-                    isSoundToggleChecked = false;
-                } else {
-                    isSoundToggleChecked = true;
-                }
-
-                Intent homeIntent = new Intent(this, StartingActivity.class);
-                startActivity(homeIntent);
-                break;
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        if (!toggleButton.isChecked()) {
+            isSoundToggleChecked = false;
+        } else {
+            isSoundToggleChecked = true;
         }
     }
 
@@ -100,7 +69,6 @@ public class GameSetting extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-
     // Back press button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -112,5 +80,37 @@ public class GameSetting extends AppCompatActivity implements View.OnClickListen
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void setTypeface() {
+        setFont = Typeface.createFromAsset(getAssets(), "setFont.otf");
+
+        txtSound.setTypeface(setFont, Typeface.BOLD);
+        txtLevel.setTypeface(setFont, Typeface.BOLD);
+        toggleButton.setTypeface(setFont, Typeface.BOLD);
+    }
+
+    private void setToggle() {
+        if (isSoundToggleChecked) {
+            toggleButton.setChecked(true);
+        } else {
+            toggleButton.setChecked(false);
+        }
+    }
+
+    private void setSelectedLevel() {
+        switch(gameLevel) {
+            case 0:
+                ((RadioButton)radiogroup.getChildAt(0)).setChecked(true);
+                break;
+            case 1:
+                ((RadioButton)radiogroup.getChildAt(1)).setChecked(true);
+                break;
+        }
+    }
+
+    private void setListeners() {
+        toggleButton.setOnCheckedChangeListener(this);
+        radiogroup.setOnCheckedChangeListener(this);
     }
 }

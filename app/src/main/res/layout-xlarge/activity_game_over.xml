@@ -19,8 +19,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="GAME OVER"
+            android:textSize="60sp"
             android:id="@+id/txtGameOver"
             android:layout_gravity="center_horizontal" />
     </LinearLayout>
@@ -35,7 +35,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="New Score:"
             android:id="@+id/txtNewScore"
             android:layout_gravity="center_horizontal"
@@ -44,11 +43,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="0"
             android:id="@+id/txtScore"
             android:layout_marginLeft="5dp"
-            android:textSize="20dp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,7 +59,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="High Score:"
             android:id="@+id/txtHS"
             android:textSize="25dp" />
@@ -69,11 +66,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="0"
             android:id="@+id/txtHighScore"
             android:layout_marginLeft="5dp"
-            android:textSize="20dp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
     <LinearLayout
